@@ -15,7 +15,7 @@ The time that it takes the timer to roll over is 16ms, and each counter lasts 1 
 |Start logic 1 half-pulse|4.45|4411|0|
 |Data 1 logic 0 half-pulse|0.601|595.6875|22.32104762|
 |Data 1 logic 1 half-pulse|1.67|1626.125|22.51184873|
-|Data 0 logic 0 half-pulse|0.599|588.|20.33715811|
+|Data 0 logic 0 half-pulse|0.599|588.5|20.33715811|
 |Data 0 logic 1 half-pulse|0.597|521.8125|14.41396892|
 |Stop logic 0 half-pulse|0.599|595|0|
 |Stop logic 1 half-pulse|39.4|39445|0|
