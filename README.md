@@ -26,14 +26,14 @@ Then I wrote the codes (in hex) for several remote control buttons.
 
 |Button|code (not including start and stop bits)|
 |:--|:--|
-|0|0x0F50AF|	
-|1|0x0F007F|
-|2|0x0F807F|
-|3|0x0F40BF|
-|Power|0x0F30CF|	
-|VOL +|0x0F42BD|
-|VOL -|0x0FC23C|
-|CH +|0x0F08F7|
-|CH -|0x0F8876|	
+|0|0x00FF50AF|	
+|1|0x00FF00FF|
+|2|0x00FF807F|
+|3|0x00FF40BF|
+|Power|0x00FF30CF|	
+|VOL +|0x00FF42BD|
+|VOL -|0x00FFC23C|
+|CH +|0x00FF08F7|
+|CH -|0x00FF8876|	
 
 
