@@ -1,8 +1,9 @@
 //-----------------------------------------------------------------
-// Name:	Coulston
-// File:	lab5.h
+// Name:	Coulston/Dusty Weisner
+// File:	lab5.c
 // Date:	Fall 2014
-// Purp:	Include file for the MSP430
+// Purp:	Demo the decoding of an IR packet
+// Weisner Documentation: none
 //-----------------------------------------------------------------
 
 //-----------------------------------------------------------------
@@ -34,7 +35,7 @@ __interrupt void timerOverflow (void);
 #define		HIGH_2_LOW		P2IES |= BIT6
 #define		LOW_2_HIGH		P2IES &= ~BIT6
 
-
+// defined average pulse durations and min and max based on std dev.
 #define		averageLogic0Pulse	590
 #define		averageLogic1Pulse	1626
 #define		averageStartPulse	4411
@@ -45,18 +46,19 @@ __interrupt void timerOverflow (void);
 #define		minStartPulse		averageStartPulse - 200
 #define		maxStartPulse		averageStartPulse + 200
 
-#define		PWR		0x00FF30CF
-#define		ONE		0x00FF00FF
-#define		TWO		0x00FF807F
-#define		THR		0x00FF40BF
-#define 	ZERO	0x00FF50AF
 
+// defined my tv remote's hex values for each button press that could be used
+#define		PWR	  	0x00FF30CF
+#define		ONE	  	0x00FF00FF
+#define		TWO	  	0x00FF807F
+#define		THR	  	0x00FF40BF
+#define 	ZERO  	0x00FF50AF
 #define		VOL_UP	0x00FF42BD
 #define		VOL_DW	0x00FFC23C
-#define		CH_UP	0x00FF08F7
-#define		CH_DW	0x00FF8877
-#define		CH_R	0x00FFC837
-#define		CH_L	0x00FF48B7
-#define		SEL		0x00FF708F
+#define		CH_UP	 0x00FF08F7
+#define		CH_DW	 0x00FF8877
+#define		CH_R	 0x00FFC837
+#define		CH_L  	0x00FF48B7
+#define		SEL	 0x00FF708F
 
 

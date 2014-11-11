@@ -5,7 +5,7 @@
 // Purp:	Demo the decoding of an IR packet
 // Weisner Documentation: I had some help from C2C Clayton Jaksha
 // 	in understanding how to use my if statemnents inside the
-// 	interrupt. I recieved help from Dr. York in a little bug
+// 	interrupt. I recieved help from Dr. York in a little bug 
 //	that requires me to initialize everything every time the
 //	program draws to the LCD screen***.
 //-----------------------------------------------------------------
@@ -57,17 +57,17 @@ void main(void) {
 	while(1)  {
 		// flag for when the interrupt has fulfilled its purpose
 		if(flagged==1) {
-
+			
 			// Disabling the interrupt before doing this seemed to help the
 			// program from screwing up
 			_disable_interrupt();
 			packetCount = 0;
-
+			
 			// Count past the start bits
 			while(packetData[packetCount]==2) {
 				packetCount++;
 			}
-
+			
 			// Start the concatenation of the ir Packet
 			while(packetCount<33) {
 				irPacket+=packetData[packetCount];
@@ -76,16 +76,16 @@ void main(void) {
 			}
 			// One bit was being left out
 			irPacket+=packetData[packetCount];
-
-			// The select button on the remote caused the
+			
+			// The select button on the remote caused the 
 			// programs etch-a-sketch to change to a delete
 			// mode
 			if (irPacket == SEL) {
 				if (change_press == TRUE){
 					change_press = FALSE;
 				} else change_press = TRUE;
-
-				//***The bug as explained in Weisner
+				
+				//***The bug as explained in Weisner 
 				// Documentation above
 				init();
 				initNokia();
@@ -102,26 +102,26 @@ void main(void) {
 			} else if (irPacket == CH_R) {
 				if (x<=10) x=x+1;
 			}
-
-			//***The bug as explained in Weisner
+			
+			//***The bug as explained in Weisner 
 			// Documentation above
 			init();
 			initNokia();
 			drawBlock(y,x,change_press);
 			initMSP430();
-
+			
 			// Delay for button presses
 			unsigned int i;
 			for(i=0; i<0xFFFF;i++);
 			for(i=0; i<0xFFFF;i++);
-
+			
 			// reset Index, ir Packet, and interrupt flag;
 			// and reenable the interrupt
 			packetIndex=0;
 			irPacket=0x00000000;
 			flagged =0;
 			_enable_interrupt();
-
+			
 		// if flag isn't set, then nothing should happen to irPacket
 		} else {
 			irPacket = 0x00000000;
@@ -204,7 +204,7 @@ __interrupt void pinChange (void) {
 	switch (pin) {					// read the current pin level
 		case 0:						// !!!!!!!!!NEGATIVE EDGE!!!!!!!!!!
 			pulseDuration = TAR;
-
+			
 			// if the pulse duration is within range of a possible 0 or 1 data value,
 			// the pulse duration is changed to a 0 or a 1. If the pulse duration is within the
 			// range of a possible start bit, the pulse duration is changed to a 2 so that
@@ -216,7 +216,7 @@ __interrupt void pinChange (void) {
 			}else {
 				pulseDuration = 2;
 			}
-
+			
 			// Set all of the new pulse durations to the array of packetData
 			packetData[packetIndex++] = pulseDuration;
 			LOW_2_HIGH; // Setup pin interrupr on positive edge
