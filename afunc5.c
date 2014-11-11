@@ -1,12 +1,18 @@
 //-----------------------------------------------------------------
-// Name:	Coulston
+// Name:	Coulston/Dusty Weisner
 // File:	lab5.c
 // Date:	Fall 2014
 // Purp:	Demo the decoding of an IR packet
+// Weisner Documentation: I had some help from C2C Clayton Jaksha
+// 	in understanding how to use my if statemnents inside the
+// 	interrupt. I recieved help from Dr. York in a little bug 
+//	that requires me to initialize everything every time the
+//	program draws to the LCD screen***.
 //-----------------------------------------------------------------
 #include <msp430g2553.h>
 #include "afunc5.h"
 
+// external methods
 extern void init();
 extern void initNokia();
 extern void clearDisplay();
@@ -16,14 +22,13 @@ extern void drawBlock(unsigned char row, unsigned char col, unsigned char chgpre
 #define		FALSE			0
 
 
-
+// intialize variables
 int8	newIrPacket = FALSE;
 int16	packetData[48];
 int8	packetIndex = 0;
 int32	irPacket = 0x00000000;
 int8 packetCount =0;
 int8 sum=0;
-
 unsigned char flagged=0;
 
 // -----------------------------------------------------------------------
@@ -48,88 +53,79 @@ void main(void) {
 
 
 		initMSP430();				// Setup MSP to process IR and buttons
-//	//init()
-//	init();
-//	//initnokia()
-//	initNokia();
-//	//init_msp430()
 
-
-
-//	_enable_interrupt();
 	while(1)  {
-//***********************************************************************
-		//poll new packet
-		//if irPacket==UP
-		//
-//***********************************************************************
-//
+		// flag for when the interrupt has fulfilled its purpose
 		if(flagged==1) {
+			
+			// Disabling the interrupt before doing this seemed to help the
+			// program from screwing up
 			_disable_interrupt();
 			packetCount = 0;
+			
+			// Count past the start bits
 			while(packetData[packetCount]==2) {
 				packetCount++;
 			}
+			
+			// Start the concatenation of the ir Packet
 			while(packetCount<33) {
-
 				irPacket+=packetData[packetCount];
 				irPacket<<=1;
 				packetCount++;
 			}
+			// One bit was being left out
 			irPacket+=packetData[packetCount];
-
+			
+			// The select button on the remote caused the 
+			// programs etch-a-sketch to change to a delete
+			// mode
 			if (irPacket == SEL) {
-				//while(AUX_BUTTON == 0);
 				if (change_press == TRUE){
 					change_press = FALSE;
 				} else change_press = TRUE;
+				
+				//***The bug as explained in Weisner 
+				// Documentation above
 				init();
 				initNokia();
 				drawBlock(y,x,change_press);
 				initMSP430();
 			}
-
+			// Button press if statements - move block
 			if (irPacket == CH_UP) {
-//				while(UP_BUTTON == 0);
 				if (y>=1) y=y-1;
-
 			} else if (irPacket == CH_DW) {
-//				while(DOWN_BUTTON == 0);
 				if (y<=6) y=y+1;
-
 			} else if (irPacket == CH_L) {
-//				while(LEFT_BUTTON == 0);
 				if (x>=1) x=x-1;
-
 			} else if (irPacket == CH_R) {
-//				while(RIGHT_BUTTON == 0);
 				if (x<=10) x=x+1;
-
 			}
-
-
-
-
+			
+			//***The bug as explained in Weisner 
+			// Documentation above
 			init();
 			initNokia();
 			drawBlock(y,x,change_press);
 			initMSP430();
+			
+			// Delay for button presses
 			unsigned int i;
 			for(i=0; i<0xFFFF;i++);
 			for(i=0; i<0xFFFF;i++);
-
-			//
+			
+			// reset Index, ir Packet, and interrupt flag;
+			// and reenable the interrupt
 			packetIndex=0;
 			irPacket=0x00000000;
 			flagged =0;
 			_enable_interrupt();
+			
+		// if flag isn't set, then nothing should happen to irPacket
 		} else {
 			irPacket = 0x00000000;
 		}
-
-
-
-
 	} // end if new IR packet arrived
 } // end infinite loop
 // end main
@@ -208,9 +204,11 @@ __interrupt void pinChange (void) {
 	switch (pin) {					// read the current pin level
 		case 0:						// !!!!!!!!!NEGATIVE EDGE!!!!!!!!!!
 			pulseDuration = TAR;
-
-//			if (pulseDuration >= minStartPulse && pulseDuration <= maxStartPulse) {
-
+			
+			// if the pulse duration is within range of a possible 0 or 1 data value,
+			// the pulse duration is changed to a 0 or a 1. If the pulse duration is within the
+			// range of a possible start bit, the pulse duration is changed to a 2 so that
+			// in the main loop, the irPacket doesn't include start bits.
 			if (pulseDuration >= minLogic1Pulse && pulseDuration <= maxLogic1Pulse) {
 				pulseDuration = 1;
 			} else if (pulseDuration >= minLogic0Pulse && pulseDuration <= maxLogic0Pulse ) {
@@ -218,38 +216,28 @@ __interrupt void pinChange (void) {
 			}else {
 				pulseDuration = 2;
 			}
+			
+			// Set all of the new pulse durations to the array of packetData
 			packetData[packetIndex++] = pulseDuration;
-
-
-//*****************************************************************
-			//Turn TmrA off
-			//CODE HERE
-
-//*****************************************************************
 			LOW_2_HIGH; // Setup pin interrupr on positive edge
 			break;
 
 		case 1:							// !!!!!!!!POSITIVE EDGE!!!!!!!!!!!
 			TAR = 0x0000;						// time measurements are based at time 0
-//******************************************************************
-			//Turn TmrA on
-			//CODE HERE
-			//Enable TmrA interrupt
-			//CODE HERE
-
-//******************************************************************
 			HIGH_2_LOW; 						// Setup pin interrupr on falling edge
 			break;
 	} // end switch
 
 	P2IFG &= ~BIT6;			// Clear the interrupt flag to prevent immediate ISR re-entry
 
+	// set an interrupt flag for if the program has experienced an interrupt (a remote button press)
 	if (packetIndex > 33) {
-					flagged=1;
-				}
+		flagged=1;
+	}
 } // end pinChange ISR
 
 
+// Timer interrupt below was not used:
 
 // -----------------------------------------------------------------------
 //			0 half-bit	1 half-bit		TIMER A COUNTS		TIMER A COUNTS
@@ -261,16 +249,5 @@ __interrupt void pinChange (void) {
 // -----------------------------------------------------------------------
 //#pragma vector = TIMER0_A1_VECTOR			// This is from the MSP430G2553.h file
 //__interrupt void timerOverflow (void) {
-//
-////************************************************************************
-//	//Turn off TmrA
-//	//CODE HERE
-//	//Turn off TmrA interrupt
-//	//CODE HERE
-//	//Clear packet index
-//	//CODE HERE
-//	//Set newPacket Flag
-//	//CODE HERE
-////************************************************************************
 //	TACTL &= ~TAIFG;
 //}
