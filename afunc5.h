@@ -48,17 +48,17 @@ __interrupt void timerOverflow (void);
 
 
 // defined my tv remote's hex values for each button press that could be used
-#define		PWR		0x00FF30CF
-#define		ONE		0x00FF00FF
-#define		TWO		0x00FF807F
-#define		THR		0x00FF40BF
-#define 	ZERO	0x00FF50AF
+#define		PWR	  	0x00FF30CF
+#define		ONE	  	0x00FF00FF
+#define		TWO	  	0x00FF807F
+#define		THR	  	0x00FF40BF
+#define 	ZERO  	0x00FF50AF
 #define		VOL_UP	0x00FF42BD
 #define		VOL_DW	0x00FFC23C
-#define		CH_UP	0x00FF08F7
-#define		CH_DW	0x00FF8877
-#define		CH_R	0x00FFC837
-#define		CH_L	0x00FF48B7
-#define		SEL		0x00FF708F
+#define		CH_UP	 0x00FF08F7
+#define		CH_DW	 0x00FF8877
+#define		CH_R	 0x00FFC837
+#define		CH_L  	0x00FF48B7
+#define		SEL	 0x00FF708F
 
 
