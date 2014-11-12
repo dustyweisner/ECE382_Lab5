@@ -7,7 +7,7 @@
 // 	in understanding how to use my if statemnents inside the
 // 	interrupt. I recieved help from Dr. York in a little bug 
 //	that requires me to initialize everything every time the
-//	program draws to the LCD screen***.
+//	program draws to the LCD screen***. 
 //-----------------------------------------------------------------
 #include <msp430g2553.h>
 #include "afunc5.h"
