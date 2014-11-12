@@ -9,6 +9,8 @@ __*Day 1*__
 
 The time that it takes the timer to roll over is 16ms, and each counter lasts 1 us (8MHz/8).
 
+![](https://github.com/dustyweisner/ECE382_Lab5/blob/master/Images/Day1Image.gif?raw=true)
+
 |Pulse|Duration-logic analayzer (ms)|Timer A counts avg|Timer A counts st dev|
 |:--|:--|:--|:--|
 |Start logic 0 half-pulse|9.01|8937|0|
@@ -47,7 +49,11 @@ __*LAB*__
 
 *REQUIRED FUNCTIONALITY*
 
-For the required functionality, I was tasked to turn an LED on and off with one button on the remote and to toggle the other one using a different button. First, because I combined Day 2 work with the required functionality, I had to make my program take the packet of IR data, and put it into one variable to use. To do so, I knew that the program would keep asking to see if I had pushed a button, unless I used the interrupt! So I decided to use the interrupt, and I used the "start5.c" and "start5.h" files that were already given as shell code by Dr. Coulston. I scrolled to where he gave an interrupt shell, and noticed that all I had to do was write my if statements for whether the logic one half-pulses were data 1 or 0 in case 0 inside the  switch statements. If the pulse duration is within range of my remote's 0 or 1 data value (given in the define statements below), the pulse duration is changed to a 0 or a 1. If the pulse duration is within the range of the remote's average start bit, the pulse duration is changed to a 2 so that in the main loop, the irPacket doesn't include start bits.
+For the required functionality, I was tasked to turn an LED on and off with one button on the remote and to toggle the other one using a different button. First, because I combined Day 2 work with the required functionality, I had to make my program take the packet of IR data, and put it into one variable to use. The following is a hradware schematic of what is going on:
+
+![](https://github.com/dustyweisner/ECE382_Lab5/blob/master/Images/HardwareSchematic.gif?raw=true)
+
+To do so, I knew that the program would keep asking to see if I had pushed a button, unless I used the interrupt! So I decided to use the interrupt, and I used the "start5.c" and "start5.h" files that were already given as shell code by Dr. Coulston. I scrolled to where he gave an interrupt shell, and noticed that all I had to do was write my if statements for whether the logic one half-pulses were data 1 or 0 in case 0 inside the  switch statements. If the pulse duration is within range of my remote's 0 or 1 data value (given in the define statements below), the pulse duration is changed to a 0 or a 1. If the pulse duration is within the range of the remote's average start bit, the pulse duration is changed to a 2 so that in the main loop, the irPacket doesn't include start bits.
 
 start5.h:
 
